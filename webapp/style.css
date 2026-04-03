@@ -1,110 +1,463 @@
-/* Rom Patcher JS CSS template by Marc Robledo v20220323 */
+/* Ultimate Rom Patcher - CSS */
 
-/* @FONT-FACES */
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
-@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:300');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@300;400&display=swap');
 
-
-body{
-	--rom-patcher-color-background:#31343a;
-	--rom-patcher-color-primary:#2a9ca5;
-	--rom-patcher-color-primary-hover:#3aacb5;
-	--rom-patcher-color-primary-active:#297b81;
-	--rom-patcher-color-primary-focus:#a8fff3;
-
-	--rom-patcher-color-danger:#ff0030;
-	--rom-patcher-color-warning:#ff7800;
-
-	--rom-patcher-color-spinner:#41bdc7;
-
-	--rom-patcher-color-muted:#888;
-	--rom-patcher-color-outer-btn:#fff;
-	--rom-patcher-color-outer-btn-hover:#2b2e33;
-
-	--rom-patcher-color-footer:#767b86;
-	--rom-patcher-color-footer-link:#969ba6;
-	--rom-patcher-color-footer-link-border:#464b56;
-	--rom-patcher-color-footer-hover:#fff;
-	--rom-patcher-color-footer-hover-border:#41d5ff;
-
-	--rom-patcher-color-switch:#fff;
-	--rom-patcher-color-switch-background:#474c56;
-	--rom-patcher-color-switch-background-enabled:#41bdc7;
-
-	margin:0;
-	font:15px 'Open Sans',sans-serif;
-	cursor:default;
-	line-height:1.8;
-	background-color:var(--rom-patcher-color-background);
-	color:#3c3c3c;
-	-moz-user-select:none;
-	-webkit-user-select: none;
-	-ms-user-select:none;
-	-o-user-select:none;
-	user-select:none;
+/* ── KEYFRAMES ───────────────────────────────────────────────── */
+@keyframes fadeSlideUp {
+        0%  { opacity: 0; transform: translateY(18px); }
+        100%{ opacity: 1; transform: translateY(0); }
 }
-/* body.dragging-files{
-	color:red !important;
-	pointer-events: none;
-} */
-
-/* flex main column */
-html, body{height:100%}
-#column{
-	display: flex;
-	flex-wrap: nowrap;
-	height: 100%;
-	flex-direction: column;
+@keyframes spin {
+        100% { transform: rotate(360deg); }
 }
-header{margin: 1% 0 4%}
-header h1{display:none}
-footer{padding: 50px 0 20px}
-#wrapper{flex-basis:100%}
-
-
-.clickable{cursor:pointer}
-.hide{display:none !important}
-.text-center{text-align:center}
-.text-right{text-align:right}
-.text-truncate{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.m-b{margin-bottom:8px}
-/* flex box */
-.row{
-	display:flex;
-	flex-flow:row wrap; /* this is the same as flex-direction:row;flex-wrap:wrap; */
-	align-items:center; /* vertical align */
-	justify-content:space-between
-}
-.row>div:first-child{width:25%}
-.row>div:last-child{width:73%}
-.row.row-lg>div:first-child{width:70%}
-.row.row-lg>div:last-child{width:30%}
-
-
-
-
-
-
-
-/* icons */
-.icon{
-	display:inline-block;
-	vertical-align:middle;
-	width:16px;height:16px
+@keyframes pulse {
+        0%,100% { opacity: 1; }
+        50%      { opacity: .6; }
 }
 
+/* ── TOKENS ──────────────────────────────────────────────────── */
+body {
+        --c-bg:           #F55027;
+        --c-bg-card:      #ffffff;
+        --c-primary:      #F55027;
+        --c-primary-h:    #d94420;
+        --c-primary-a:    #b83818;
+        --c-primary-focus:#ffcbb9;
 
+        --c-danger:       #e02020;
+        --c-warning:      #e07020;
+        --c-spinner:      #F55027;
 
+        --c-muted:        #999;
+        --c-outer-btn:    #fff;
+        --c-outer-btn-h:  rgba(0,0,0,.12);
 
+        --c-footer:       rgba(255,255,255,.75);
+        --c-footer-link:  #fff;
+        --c-footer-link-b:rgba(255,255,255,.35);
+        --c-footer-hover: #fff;
+        --c-footer-hover-b:#fff;
 
+        --c-switch:       #fff;
+        --c-switch-bg:    rgba(0,0,0,.2);
+        --c-switch-on:    #F55027;
 
+        --radius:         10px;
+        --shadow:         0 8px 32px rgba(0,0,0,.18);
 
+        margin: 0;
+        font: 15px/1.8 'Inter', sans-serif;
+        cursor: default;
+        background-color: var(--c-bg);
+        color: #3c3c3c;
+        -webkit-user-select: none;
+        user-select: none;
+}
 
-/* header+footer */
-header{text-align:center}
-header h1{margin:0}
-header img{max-width:90%; height:192px;}
+/* ── LAYOUT ──────────────────────────────────────────────────── */
+html, body { height: 100%; }
+#column {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        align-items: center;
+}
+header { margin: 32px 0 20px; text-align: center; }
+header h1 { display: none; }
+header img {
+        max-width: 90%;
+        height: 160px;
+        object-fit: contain;
+        filter: drop-shadow(0 4px 12px rgba(0,0,0,.25));
+        animation: fadeSlideUp .55s cubic-bezier(.22,1,.36,1) both;
+}
 
+#wrapper {
+        flex: 1;
+        box-sizing: border-box;
+        width: 600px;
+        max-width: 95%;
+        animation: fadeSlideUp .65s .08s cubic-bezier(.22,1,.36,1) both;
+}
+
+footer {
+        width: 100%;
+        text-align: center;
+        padding: 32px 0 24px;
+        color: var(--c-footer);
+        font-size: 85%;
+        animation: fadeSlideUp .65s .15s cubic-bezier(.22,1,.36,1) both;
+}
+footer a {
+        color: var(--c-footer-link);
+        text-decoration: none;
+        border-bottom: 1px solid var(--c-footer-link-b);
+        transition: border-color .15s;
+}
+footer a:hover {
+        border-color: var(--c-footer-hover-b);
+}
+
+hr { border: none; border-top: 1px dotted #ddd; margin: 15px 0; }
+
+/* ── UTILITIES ───────────────────────────────────────────────── */
+.clickable { cursor: pointer; }
+.hide { display: none !important; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-truncate { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m-b { margin-bottom: 8px; }
+
+.row {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        justify-content: space-between;
+}
+.row > div:first-child { width: 25%; }
+.row > div:last-child  { width: 73%; }
+.row.row-lg > div:first-child { width: 70%; }
+.row.row-lg > div:last-child  { width: 28%; }
+
+/* ── ICONS ───────────────────────────────────────────────────── */
+.icon {
+        display: inline-block;
+        vertical-align: middle;
+        width: 16px; height: 16px;
+}
+
+/* ── OUTER BUTTONS (settings) ────────────────────────────────── */
+.btn-transparent {
+        background-color: transparent;
+        color: var(--c-outer-btn);
+        cursor: pointer;
+        text-align: center;
+        border-radius: 6px;
+        transition: background-color .15s;
+}
+.btn-transparent:hover, .btn-transparent:focus {
+        background-color: var(--c-outer-btn-h);
+}
+.btn-transparent img {
+        height: 16px;
+        display: inline-block;
+        vertical-align: middle;
+}
+
+/* ── MAIN CARD (tab) ─────────────────────────────────────────── */
+.tab {
+        background-color: var(--c-bg-card);
+        padding: 28px 24px;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+}
+
+.buttons { margin-top: 14px; }
+
+/* ── FORMS ───────────────────────────────────────────────────── */
+input[type=file],
+input[type=text],
+input[type=checkbox],
+select {
+        box-sizing: border-box;
+        max-width: 100%;
+        font-family: inherit;
+        font-size: 100%;
+        outline: none;
+        border: none;
+        border-radius: 6px;
+        background-color: #f0f2f2;
+        transition: background-color .15s, box-shadow .15s;
+}
+input[type=file]:focus:not(:disabled),
+input[type=text]:focus:not(:disabled),
+select:focus:not(:disabled),
+input[type=checkbox].styled:focus:not(:disabled) {
+        box-shadow: var(--c-primary-focus) 0 0 0 3px;
+}
+#rom-patcher-container input[type=file],
+#rom-patcher-container select,
+#patch-builder-container input[type=file],
+#patch-builder-container input[type=text] { width: 100%; }
+
+input[type=file], input[type=text] { padding: 7px 12px; }
+#patch-builder-container-metadata-inputs input[type=text]:not(:last-child) { margin-bottom: 8px; }
+input[type=file].no-file-selector-button::file-selector-button { display: none; }
+
+select {
+        padding: 7px 22px 7px 12px;
+        -webkit-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgeD0iMTJweCIgeT0iMHB4IiB3aWR0aD0iMjRweCIgaGVpZ2h0PSIzcHgiIHZpZXdCb3g9IjAgMCA2IDMiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDYgMyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBvbHlnb24gcG9pbnRzPSI1Ljk5MiwwIDIuOTkyLDMgLTAuMDA4LDAgIi8+PC9zdmc+");
+        background-position: 100% center;
+        background-repeat: no-repeat;
+}
+select::-ms-expand { display: none; }
+input[type=file]:hover:not(:disabled),
+input[type=text]:hover:not(:disabled),
+select:hover:not(:disabled) { background-color: #e4e7e7; }
+input[type=file]:hover:not(:disabled),
+select:hover:not(:disabled) { cursor: pointer; }
+input[type=file]:disabled, select:disabled { color: var(--c-muted); }
+input[type=file].drag-over:not(:disabled) { box-shadow: var(--c-primary) 0 0 0 2px; }
+
+input[type=file].empty,
+input[type=file]:not(:disabled):not(.empty):hover {
+        padding-left: 34px;
+        background-repeat: no-repeat;
+        background-position: 10px center;
+        background-size: 16px;
+        background-image: url(../rom-patcher-js/assets/icon_upload.svg);
+}
+input[type=file].valid {
+        background-color: #d6ffc8;
+        padding-right: 30px;
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 16px;
+        background-image: url(../rom-patcher-js/assets/icon_check_circle_green.svg);
+}
+input[type=file].valid:not(:disabled):not(.empty):hover {
+        background-color: #adf795;
+        background-position: 10px center, right 12px center;
+        background-size: 16px, 16px;
+        background-image: url(../rom-patcher-js/assets/icon_upload.svg), url(../rom-patcher-js/assets/icon_check_circle_green.svg);
+}
+input[type=file].invalid {
+        background-color: #ffc8c8;
+        padding-right: 30px;
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 16px;
+        background-image: url(../rom-patcher-js/assets/icon_x_circle_red.svg);
+}
+input[type=file].invalid:not(:disabled):not(.empty):hover {
+        background-color: #ffa3a3;
+        background-position: 10px center, right 12px center;
+        background-size: 16px, 16px;
+        background-image: url(../rom-patcher-js/assets/icon_upload.svg), url(../rom-patcher-js/assets/icon_x_circle_red.svg);
+}
+
+/* ── BUTTONS ─────────────────────────────────────────────────── */
+button {
+        font-family: inherit;
+        font-size: 100%;
+        font-weight: 600;
+        min-width: 130px;
+        border-radius: 8px;
+        border: 0;
+        outline: none;
+        padding: 11px 24px;
+        margin: 0 5px;
+        background-color: var(--c-primary);
+        color: white;
+        letter-spacing: .02em;
+        transition: background-color .15s, transform .1s, box-shadow .15s;
+        box-shadow: 0 2px 8px rgba(245,80,39,.3);
+        box-sizing: border-box;
+}
+button:not(:disabled) { cursor: pointer; }
+button:disabled { opacity: .4 !important; cursor: not-allowed; box-shadow: none; }
+.tab button:not(:disabled):hover {
+        background-color: var(--c-primary-h);
+        box-shadow: 0 4px 14px rgba(245,80,39,.4);
+        transform: translateY(-1px);
+}
+.tab button:not(:disabled):active {
+        background-color: var(--c-primary-a);
+        transform: translateY(1px);
+        box-shadow: 0 1px 4px rgba(245,80,39,.2);
+}
+
+/* ── TYPOGRAPHY ──────────────────────────────────────────────── */
+.text-selectable {
+        -webkit-user-select: text;
+        user-select: text;
+        cursor: text;
+}
+.text-mono {
+        font-family: 'Roboto Mono', monospace;
+        color: var(--c-muted);
+        font-size: 12px;
+}
+.text-muted { color: var(--c-muted); }
+
+#rom-patcher-span-crc32 span.clickable { text-decoration: underline; }
+#rom-patcher-span-crc32 span.clickable:hover { cursor: pointer; color: black; }
+
+/* ── SHOW/HIDE ROWS ──────────────────────────────────────────── */
+#rom-patcher-row-info-rom,
+#rom-patcher-row-alter-header,
+#rom-patcher-row-patch-description,
+#rom-patcher-row-patch-requirements,
+#rom-patcher-row-error-message,
+#patch-builder-row-error-message { display: none; }
+
+#rom-patcher-row-info-rom.show,
+#rom-patcher-row-alter-header.show,
+#rom-patcher-row-patch-description.show,
+#rom-patcher-row-patch-requirements.show { display: flex; }
+
+#rom-patcher-row-error-message.show,
+#patch-builder-row-error-message.show { display: block; }
+
+#rom-patcher-patch-description { font-size: 85%; }
+#rom-patcher-select-file-patch { width: 100%; }
+
+#rom-patcher-error-message,
+#patch-builder-error-message {
+        color: var(--c-danger);
+        padding-left: 22px;
+        background-image: url(../rom-patcher-js/assets/icon_x_circle_red.svg);
+        background-repeat: no-repeat;
+        background-position: left center;
+}
+#rom-patcher-error-message.warning,
+#patch-builder-error-message.warning {
+        color: var(--c-warning);
+        background-image: url(../rom-patcher-js/assets/icon_alert_orange.svg);
+}
+
+/* ── SPINNER ─────────────────────────────────────────────────── */
+.rom-patcher-spinner {
+        width: 20px; height: 20px;
+        display: inline-block;
+        position: relative;
+        animation: spin 1s ease-in-out infinite;
+        vertical-align: middle;
+}
+.rom-patcher-spinner:before {
+        width: 6px; height: 6px;
+        background-color: var(--c-spinner);
+        border-radius: 3px;
+        display: inline-block;
+        content: "";
+        position: absolute;
+        top: 0; left: 50%;
+        margin-left: -3px;
+}
+#rom-patcher-button-apply .rom-patcher-spinner:before { background-color: white; }
+
+/* ── INPUT CONTAINER (for spinner overlay) ───────────────────── */
+.rom-patcher-container-input { position: relative; }
+.rom-patcher-container-input input.loading,
+.rom-patcher-container-input select.loading { padding-left: 32px; }
+.rom-patcher-container-input input.loading + .rom-patcher-spinner,
+.rom-patcher-container-input select.loading + .rom-patcher-spinner {
+        position: absolute;
+        top: 50%; margin-top: -10px;
+        left: 8px;
+}
+
+/* ── DIALOGS ─────────────────────────────────────────────────── */
+.rom-patcher-dialog::backdrop,
+#rom-patcher-dialog-zip-backdrop {
+        background-color: rgba(0,0,0,.6);
+        backdrop-filter: blur(4px);
+}
+#rom-patcher-dialog-zip-backdrop {
+        justify-content: center;
+        align-items: center;
+}
+.rom-patcher-dialog {
+        vertical-align: middle;
+        margin: auto;
+        background-color: white;
+        color: #666;
+        box-sizing: border-box;
+        box-shadow: rgba(0,0,0,.25) 0 12px 40px;
+        padding: 24px;
+        border-radius: var(--radius);
+        border: none;
+        animation: fadeSlideUp .3s cubic-bezier(.22,1,.36,1) both;
+}
+
+/* settings dialog */
+#dialog-settings { min-width: 400px; max-width: 90%; }
+#dialog-settings-button-close {
+        padding: 8px;
+        border-radius: 50%;
+        margin-right: -8px;
+        margin-top: -8px;
+        transition: background-color .2s;
+        height: 24px;
+}
+#dialog-settings-button-close:hover {
+        cursor: pointer;
+        background-color: #f0f0f0;
+}
+
+/* styled checkbox */
+input[type=checkbox].styled {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px; height: 20px;
+        background-color: transparent;
+        border-radius: 4px;
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+        border: 2px solid var(--c-primary);
+        background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjMuMiIgZmlsbD0ibm9uZSIgZD0iTSAxLjE5LDcuMTAgNi4wNywxMi4wNiAxNC44OCwzLjMyIi8+PC9zdmc+');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 0px;
+        transition: background-color .2s, background-size .15s;
+}
+input[type=checkbox].styled:hover:not(:disabled) {
+        cursor: pointer;
+        border-color: var(--c-primary-h);
+}
+input[type=checkbox].styled:hover:checked:not(:disabled) {
+        background-color: var(--c-primary-h);
+}
+input[type=checkbox].styled:checked {
+        background-color: var(--c-primary);
+        background-size: 12px;
+}
+
+/* ZIP dialog */
+#rom-patcher-dialog-zip { min-width: 360px; }
+#rom-patcher-dialog-zip-message { text-align: center; }
+#rom-patcher-dialog-zip-file-list {
+        list-style: none;
+        padding: 0; margin: 0;
+        max-height: 300px;
+        overflow-y: auto;
+}
+#rom-patcher-dialog-zip-file-list li {
+        color: #3c3c3c;
+        padding: 4px 10px;
+        border-radius: 4px;
+        transition: background-color .1s;
+}
+#rom-patcher-dialog-zip-file-list li:hover {
+        background-color: #f0f0f0;
+        cursor: pointer;
+        color: black;
+}
+
+/* ── FOOTER SETTINGS BUTTON ──────────────────────────────────── */
+#button-settings {
+        margin-bottom: 10px;
+        border: none;
+        background: transparent;
+        box-shadow: none;
+}
+#button-settings:hover {
+        background: rgba(0,0,0,.1) !important;
+        box-shadow: none !important;
+        transform: none !important;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────────── */
+@media only screen and (max-width: 641px) {
+        #wrapper { font-size: 14px; }
+        #rom-patcher-rom-info { font-size: 11px; }
+        header img { height: 100px; }
+        #dialog-settings, #rom-patcher-dialog-zip { min-width: auto; }
+        .tab { padding: 20px 16px; }
+}
 footer{
 	text-align:center;
 	color:var(--rom-patcher-color-footer);
