@@ -1,110 +1,138 @@
-/* Rom Patcher JS (complete webapp implementation) v20240809 - Marc Robledo 2016-2024 - http://www.marcrobledo.com/license */
+/* Ultimate Rom Patcher - webapp implementation */
 
 
-/* service worker */
-const FORCE_HTTPS = true;
+/* disable forced HTTPS redirect (works in both HTTP dev and HTTPS prod) */
+const FORCE_HTTPS = false;
 if (FORCE_HTTPS && location.protocol === 'http:')
-	location.href = window.location.href.replace('http:', 'https:');
+        location.href = window.location.href.replace('http:', 'https:');
 else if (location.protocol === 'https:' && 'serviceWorker' in navigator && window.location.hostname === 'www.marcrobledo.com')
-	navigator.serviceWorker.register('/RomPatcher.js/_cache_service_worker.js', { scope: '/RomPatcher.js/' }); /* using absolute paths to avoid unexpected behaviour in GitHub Pages */
+        navigator.serviceWorker.register('/RomPatcher.js/_cache_service_worker.js', { scope: '/RomPatcher.js/' });
 
 
-/* settings */
+/* ── LANGUAGE DETECTION ──────────────────────────────────────── */
+const SUPPORTED_LANGUAGES = ['en','fr','de','it','es','nl','sv','ca','ca-va','pt-br','ru','ja','zh-cn','zh-tw'];
+function detectSystemLanguage() {
+        const raw = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+        /* exact match first */
+        if (SUPPORTED_LANGUAGES.indexOf(raw) !== -1) return raw;
+        /* prefix match (e.g. "zh-CN" → "zh-cn", "pt-BR" → "pt-br") */
+        const normalized = raw.replace('_', '-');
+        if (SUPPORTED_LANGUAGES.indexOf(normalized) !== -1) return normalized;
+        /* two-letter prefix (e.g. "en-US" → "en") */
+        const prefix = raw.substring(0, 2);
+        if (SUPPORTED_LANGUAGES.indexOf(prefix) !== -1) return prefix;
+        return 'en';
+}
+
+
+/* ── SETTINGS ────────────────────────────────────────────────── */
 const LOCAL_STORAGE_SETTINGS_ID = 'rom-patcher-js-settings';
-/* default settings */
 const settings = {
-	language: typeof navigator.userLanguage === 'string' ? navigator.userLanguage.substr(0, 2) : 'en',
-	outputSuffix: true,
-	fixChecksum: false,
-	theme: 'default'
+        language: detectSystemLanguage(),
+        outputSuffix: true,
+        fixChecksum: true,
+        theme: 'default'
 };
-/* load settings from localStorage */
+
+/* load saved settings from localStorage */
 if (typeof localStorage !== 'undefined' && localStorage.getItem(LOCAL_STORAGE_SETTINGS_ID)) {
-	try {
-		const loadedSettings = JSON.parse(localStorage.getItem(LOCAL_STORAGE_SETTINGS_ID));
+        try {
+                const loadedSettings = JSON.parse(localStorage.getItem(LOCAL_STORAGE_SETTINGS_ID));
 
-		if (typeof loadedSettings.language === 'string')
-			settings.language = loadedSettings.language;
+                if (typeof loadedSettings.language === 'string')
+                        settings.language = loadedSettings.language;
 
-		if (typeof loadedSettings.outputSuffix === 'boolean')
-			settings.outputSuffix = loadedSettings.outputSuffix;
+                if (typeof loadedSettings.outputSuffix === 'boolean')
+                        settings.outputSuffix = loadedSettings.outputSuffix;
 
-		if (typeof loadedSettings.fixChecksum === 'boolean')
-			settings.fixChecksum = loadedSettings.fixChecksum;
+                if (typeof loadedSettings.fixChecksum === 'boolean')
+                        settings.fixChecksum = loadedSettings.fixChecksum;
 
-		if (typeof loadedSettings.theme === 'string' && ['light'].indexOf(loadedSettings.theme) !== -1)
-			settings.theme = loadedSettings.theme;
-	} catch (err) {
-		console.error('Error while loading settings: ' + err.message);
-	}
+                if (typeof loadedSettings.theme === 'string' && ['light'].indexOf(loadedSettings.theme) !== -1)
+                        settings.theme = loadedSettings.theme;
+        } catch (err) {
+                console.error('Error loading settings: ' + err.message);
+        }
 }
+
 const buildSettingsForWebapp = function () {
-	return {
-		language: settings.language,
-		outputSuffix: settings.outputSuffix,
-		fixChecksum: settings.fixChecksum,
-		allowDropFiles: true,
-		ondropfiles:function(evt){
-			if(currentMode === 'creator'){
-				ocument.getElementById('switch-create-button').click();
-			}
-		}
-	};
-}
+        return {
+                language: settings.language,
+                outputSuffix: settings.outputSuffix,
+                fixChecksum: settings.fixChecksum,
+                allowDropFiles: true,
+                ondropfiles: function () {}
+        };
+};
+
 const saveSettings = function () {
-	if (typeof localStorage !== 'undefined')
-		localStorage.setItem(LOCAL_STORAGE_SETTINGS_ID, JSON.stringify(settings));
-	RomPatcherWeb.setSettings(buildSettingsForWebapp());
-}
+        if (typeof localStorage !== 'undefined')
+                localStorage.setItem(LOCAL_STORAGE_SETTINGS_ID, JSON.stringify(settings));
+        RomPatcherWeb.setSettings(buildSettingsForWebapp());
+};
 
 
-var currentMode = 'patcher';
+/* ── INIT ────────────────────────────────────────────────────── */
+window.addEventListener('load', function () {
+        /* apply theme */
+        document.body.className = 'theme-' + settings.theme;
 
+        /* settings button */
+        document.getElementById('button-settings').addEventListener('click', function () {
+                document.getElementById('dialog-settings').showModal();
+        });
+        document.getElementById('dialog-settings-button-close').addEventListener('click', function () {
+                document.getElementById('dialog-settings').close();
+        });
 
+        /* language */
+        const langSelect = document.getElementById('settings-language');
+        /* set to saved/detected language, fallback to 'en' if option not found */
+        if (langSelect.querySelector('option[value="' + settings.language + '"]')) {
+                langSelect.value = settings.language;
+        } else {
+                langSelect.value = 'en';
+                settings.language = 'en';
+        }
+        langSelect.addEventListener('change', function () {
+                settings.language = this.value;
+                saveSettings();
+                RomPatcherWeb.translateUI(settings.language);
+        });
 
-window.addEventListener('load', function (evt) {
-	/* set theme */
-	document.body.className = 'theme-' + settings.theme;
+        /* use patch name for output — checkbox is inverted (checked = use ROM name) */
+        document.getElementById('settings-output-suffix').checked = !settings.outputSuffix;
+        document.getElementById('settings-output-suffix').addEventListener('change', function () {
+                settings.outputSuffix = !this.checked;
+                saveSettings();
+        });
 
-	/* event listeners */
-	document.getElementById('button-settings').addEventListener('click', function (evt) {
-		document.getElementById('dialog-settings').showModal();
-	});
-	document.getElementById('dialog-settings-button-close').addEventListener('click', function (evt) {
-		document.getElementById('dialog-settings').close();
-	});
+        /* fix checksum */
+        document.getElementById('settings-fix-checksum').checked = settings.fixChecksum;
+        document.getElementById('settings-fix-checksum').addEventListener('change', function () {
+                settings.fixChecksum = this.checked;
+                saveSettings();
+        });
 
-	document.getElementById('settings-language').value = settings.language;
-	document.getElementById('settings-language').addEventListener('change', function () {
-		settings.language = this.value;
-		saveSettings();
-		RomPatcherWeb.translateUI(settings.language);
-	});
+        /* light theme */
+        document.getElementById('settings-light-theme').checked = settings.theme === 'light';
+        document.getElementById('settings-light-theme').addEventListener('change', function () {
+                settings.theme = this.checked ? 'light' : 'default';
+                saveSettings();
+                document.body.className = 'theme-' + settings.theme;
+        });
 
-	document.getElementById('settings-output-suffix').checked = !settings.outputSuffix;
-	document.getElementById('settings-output-suffix').addEventListener('change', function () {
-		settings.outputSuffix = !this.checked;
-		saveSettings();
-	});
-
-	document.getElementById('settings-fix-checksum').checked = settings.fixChecksum;
-	document.getElementById('settings-fix-checksum').addEventListener('change', function () {
-		settings.fixChecksum = this.checked;
-		saveSettings();
-	});
-
-	document.getElementById('settings-light-theme').checked = settings.theme === 'light';
-	document.getElementById('settings-light-theme').addEventListener('change', function () {
-		settings.theme = this.checked ? 'light' : 'default';
-		saveSettings();
-		document.body.className = 'theme-' + settings.theme;
-	});
-
-	document.getElementById('switch-create-button').addEventListener('click', function () {
-		if(!RomPatcherWeb.isInitialized())
-			throw new Error('Rom Patcher JS is not initialized yet');
-
-		if (/disabled/.test(document.getElementById('switch-create').className)) {
+        /* initialize patcher */
+        try {
+                RomPatcherWeb.initialize(buildSettingsForWebapp());
+        } catch (err) {
+                var message = err.message;
+                if (/incompatible browser/i.test(message) || /variable RomPatcherWeb/i.test(message))
+                        message = 'Your browser is outdated and not compatible with Ultimate Rom Patcher.<br/><a href="legacy/">Try the legacy version</a>';
+                document.getElementById('rom-patcher-container').innerHTML = message;
+                document.getElementById('rom-patcher-container').style.color = 'red';
+        }
+});
 			try{
 				if(!PatchBuilderWeb.isInitialized())
 					PatchBuilderWeb.initialize();
