@@ -1,110 +1,156 @@
 <!DOCTYPE html>
-<html translate="no">
+<html lang="en" translate="no">
 <head>
-	<title>Rom Patcher JS</title>
-	<meta http-equiv="content-Type" content="text/html; charset=UTF-8"/>
-	<meta name="description" content="An online web-based ROM patcher. Supported formats: IPS, BPS, UPS, APS, RUP, EBP, PPF and xdelta."/>
-	<meta name="keywords" content="ips,ups,aps,bps,rup,ninja,ebp,ppf,xdelta,patcher,online,html5,web,rom,patch,hack,translation"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-	<link rel="manifest" href="./manifest.json"/>
-	<link rel="shortcut icon" href="./webapp/app_icon_16.png" type="image/png" sizes="16x16"/>
-	<link rel="shortcut icon" href="./webapp/app_icon_192.png" type="image/png" sizes="192x192"/>
-	<!-- iOS icons -->
-	<link rel="apple-touch-icon" sizes="57x57" href="./webapp/app_icon_114.png" />
-	<link rel="apple-touch-icon" sizes="114x114" href="./webapp/app_icon_114.png" />
-	<link rel="apple-touch-icon" sizes="72x72" href="./webapp/app_icon_144.png" />
-	<link rel="apple-touch-icon" sizes="144x144" href="./webapp/app_icon_144.png" />
-	<link rel="apple-touch-icon" href="./webapp/app_icon_192.png" />
+        <title>Ultimate Rom Patcher</title>
+        <meta http-equiv="content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="description" content="Ultimate Rom Patcher — patch your ROM files online for free. Supports IPS, BPS, UPS, APS, RUP, EBP, PPF, xdelta and more formats. Fast, easy, browser-based."/>
+        <meta name="keywords" content="rom patcher, ips patch, bps patch, ups patch, aps patch, rom hack, online patcher, game patch, retro games, emulation, xdelta, ppf, ebp, rup"/>
+        <meta name="robots" content="index, follow"/>
+        <meta name="author" content="Marc Robledo"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+        <link rel="canonical" href="https://ultimate-rom-patcher.replit.app/"/>
+        <link rel="manifest" href="./manifest.json"/>
 
-	<!-- cache -->
-	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-	<meta http-equiv="Pragma" content="no-cache" />
-	<meta http-equiv="Expires" content="0" />
+        <!-- Favicon -->
+        <link rel="icon" href="https://uploads.onecompiler.io/432jwxm7x/44jadzetv/20260403_221956.png" type="image/png"/>
+        <link rel="apple-touch-icon" href="https://uploads.onecompiler.io/432jwxm7x/44jadzetv/20260403_221956.png"/>
 
-	<!-- social network metatags -->	
-	<meta name="twitter:site" content="@marc_robledo">
-	<meta name="twitter:creator" content="@marc_robledo">
-	<meta name="twitter:domain" content="marcrobledo.com">
-	<meta property="og:title" content="Rom Patcher JS">
-	<meta name="twitter:title" content="Rom Patcher JS">
-	<meta name="twitter:description" content="An online web-based ROM patcher. Supported formats: IPS, BPS, UPS, APS, RUP, EBP, PPF and xdelta.">
-	<meta property="og:image" content="https://www.marcrobledo.com/RomPatcher.js/webapp/thumbnail.jpg">
-	<meta name="twitter:image" content="https://www.marcrobledo.com/RomPatcher.js/webapp/thumbnail.jpg">
-	<meta name="twitter:card" content="photo">
+        <!-- Open Graph / Social -->
+        <meta property="og:type" content="website"/>
+        <meta property="og:title" content="Ultimate Rom Patcher"/>
+        <meta property="og:description" content="Patch your ROM files online for free. Supports IPS, BPS, UPS, APS, RUP, EBP, PPF, xdelta and more."/>
+        <meta property="og:image" content="https://uploads.onecompiler.io/432jwxm7x/44jadzetv/20260403_221956.png"/>
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:title" content="Ultimate Rom Patcher"/>
+        <meta name="twitter:description" content="Patch your ROM files online for free. Supports IPS, BPS, UPS, APS, RUP, EBP, PPF, xdelta and more."/>
+        <meta name="twitter:image" content="https://uploads.onecompiler.io/432jwxm7x/44jadzetv/20260403_221956.png"/>
 
-	<link type="text/css" rel="stylesheet" href="./webapp/style.css" media="all"/>
+        <link type="text/css" rel="stylesheet" href="./webapp/style.css" media="all"/>
 
-	<script type="text/javascript" src="./rom-patcher-js/RomPatcher.webapp.js"></script>
-	<script type="text/javascript" src="./webapp/webapp.js"></script>
+        <script type="text/javascript" src="./rom-patcher-js/RomPatcher.webapp.js"></script>
+        <script type="text/javascript" src="./webapp/webapp.js"></script>
 </head>
 <body><div id="column">
 
 
 <!-- HEADER -->
-<header><img src="./webapp/logo.png" loading="lazy" /><h1>Rom Patcher JS</h1></header>
+<header>
+        <img src="https://uploads.onecompiler.io/432jwxm7x/44jadzetv/20260403_221956.png" alt="Ultimate Rom Patcher" loading="eager" />
+        <h1>Ultimate Rom Patcher</h1>
+</header>
 
 <!-- APP -->
 <div id="wrapper">
-	<div id="switch-container"><span id="switch-create-button" class="btn-transparent"><span data-localize="yes">Creator mode</span> <span id="switch-create" class="switch disabled"></span></span></div>
+        <div class="tab">
+                <div id="rom-patcher-container">
+                        <div class="row m-b" id="rom-patcher-row-file-rom">
+                                <div class="text-right"><label for="rom-patcher-input-file-rom" data-localize="yes">ROM file:</label></div>
+                                <div class="rom-patcher-container-input">
+                                        <input type="file" id="rom-patcher-input-file-rom" class="empty" disabled />
+                                </div>
+                        </div>
+                        <div class="row m-b" id="rom-patcher-row-alter-header">
+                                <div></div>
+                                <div>
+                                        <label><input type="checkbox" id="rom-patcher-checkbox-alter-header" class="styled" /> <span id="rom-patcher-span-alter-header"></span></label>
+                                </div>
+                        </div>
+                        <div class="m-b text-selectable text-mono" id="rom-patcher-rom-info">
+                                <div class="row">
+                                        <div class="text-right">CRC32:</div>
+                                        <div class="text-truncate"><span id="rom-patcher-span-crc32"></span></div>
+                                </div>
+                                <div class="row">
+                                        <div class="text-right">MD5:</div>
+                                        <div class="text-truncate"><span id="rom-patcher-span-md5"></span></div>
+                                </div>
+                                <div class="row">
+                                        <div class="text-right">SHA-1:</div>
+                                        <div class="text-truncate"><span id="rom-patcher-span-sha1"></span></div>
+                                </div>
+                                <div class="row" id="rom-patcher-row-info-rom">
+                                        <div class="text-right">ROM:</div>
+                                        <div class="text-truncate"><span id="rom-patcher-span-rom-info"></span></div>
+                                </div>
+                        </div>
 
-	<div class="tab">
-		<div id="rom-patcher-container">
-			<div class="row m-b" id="rom-patcher-row-file-rom">
-				<div class="text-right"><label for="rom-patcher-input-file-rom" data-localize="yes">ROM file:</label></div>
-				<div class="rom-patcher-container-input">
-					<input type="file" id="rom-patcher-input-file-rom" class="empty" disabled />
-				</div>
-			</div>
-			<div class="row m-b" id="rom-patcher-row-alter-header">
-				<div></div>
-				<div>
-					<label><input type="checkbox" id="rom-patcher-checkbox-alter-header" class="styled" /> <span id="rom-patcher-span-alter-header"></span></label>
-				</div>
-			</div>
-			<div class="m-b text-selectable text-mono" id="rom-patcher-rom-info">
-				<div class="row">
-					<div class="text-right">CRC32:</div>
-					<div class="text-truncate"><span id="rom-patcher-span-crc32"></span></div>
-				</div>
-				<div class="row">
-					<div class="text-right">MD5:</div>
-					<div class="text-truncate"><span id="rom-patcher-span-md5"></span></div>
-				</div>
-				<div class="row">
-					<div class="text-right">SHA-1:</div>
-					<div class="text-truncate"><span id="rom-patcher-span-sha1"></span></div>
-				</div>
-				<div class="row" id="rom-patcher-row-info-rom">
-					<div class="text-right">ROM:</div>
-					<div class="text-truncate"><span id="rom-patcher-span-rom-info"></span></div>
-				</div>
-			</div>
+                        <div class="row m-b" id="rom-patcher-row-file-patch">
+                                <div class="text-right"><label for="rom-patcher-input-file-patch" data-localize="yes">Patch file:</label></div>
+                                <div class="rom-patcher-container-input">
+                                        <input type="file" id="rom-patcher-input-file-patch" class="empty" accept=".ips,.ups,.bps,.aps,.rup,.ppf,.ebp,.bdf,.bspatch,.mod,.xdelta,.vcdiff,.zip" disabled />
+                                </div>
+                        </div>
+                        <div class="row m-b" id="rom-patcher-row-patch-description">
+                                <div class="text-right text-mono" data-localize="yes">Description:</div>
+                                <div class="text-truncate" id="rom-patcher-patch-description"></div>
+                        </div>
+                        <div class="row m-b text-selectable text-mono" id="rom-patcher-row-patch-requirements">
+                                <div class="text-right text-mono" id="rom-patcher-patch-requirements-type">ROM requirements:</div>
+                                <div class="text-truncate" id="rom-patcher-patch-requirements-value"></div>
+                        </div>
 
-			<div class="row m-b" id="rom-patcher-row-file-patch">
-				<div class="text-right"><label for="rom-patcher-input-file-patch" data-localize="yes">Patch file:</label></div>
-				<div class="rom-patcher-container-input">
-					<input type="file" id="rom-patcher-input-file-patch" class="empty" accept=".ips,.ups,.bps,.aps,.rup,.ppf,.ebp,.bdf,.bspatch,.mod,.xdelta,.vcdiff,.zip" disabled />
-				</div>
-			</div>
-			<div class="row m-b" id="rom-patcher-row-patch-description">
-				<div class="text-right text-mono" data-localize="yes">Description:</div>
-				<div class="text-truncate" id="rom-patcher-patch-description"></div>
-			</div>
-			<div class="row m-b text-selectable text-mono" id="rom-patcher-row-patch-requirements">
-				<div class="text-right text-mono" id="rom-patcher-patch-requirements-type">ROM requirements:</div>
-				<div class="text-truncate" id="rom-patcher-patch-requirements-value"></div>
-			</div>
+                        <div class="buttons text-center">
+                                <div id="rom-patcher-row-error-message" class="m-b"><span id="rom-patcher-error-message"></span></div>
+                                <button id="rom-patcher-button-apply" data-localize="yes" disabled>Apply patch</button>
+                        </div>
+                </div>
+        </div>
+</div>
 
-			<div class="buttons text-center">
-				<div id="rom-patcher-row-error-message" class="m-b"><span id="rom-patcher-error-message"></span></div>
-				<button id="rom-patcher-button-apply" data-localize="yes" disabled>Apply patch</button>
-			</div>
-		</div>
 
-		<div id="patch-builder-container" style="display:none">
-			<div class="row m-b">
-				<div class="text-right"><label for="patch-builder-input-file-original" data-localize="yes" >Original ROM:</label></div>
-				<div>
+<!-- FOOTER -->
+<footer>
+        <div>
+                <button id="button-settings" class="btn-transparent"><img src="./webapp/icon_settings.svg" loading="lazy" class="icon settings" /> <span data-localize="yes">Settings</span></button>
+        </div>
+        <a href="https://www.marcrobledo.com/" target="_blank" rel="noopener">Credits: Marc Robledo</a>
+</footer>
+
+
+<!-- SETTINGS DIALOG -->
+<dialog id="dialog-settings" class="rom-patcher-dialog">
+        <div class="text-right m-b"><img id="dialog-settings-button-close" src="./webapp/icon_close.svg" loading="lazy" /></div>
+
+        <div class="row m-b">
+                <div><label for="settings-language">Language</label></div>
+                <div class="text-right">
+                        <select id="settings-language" class="enabled">
+                                <option value="en">English</option>
+                                <option value="fr">Français</option>
+                                <option value="de">Deutsch</option>
+                                <option value="it">Italiano</option>
+                                <option value="es">Español</option>
+                                <option value="nl">Nederlands</option>
+                                <option value="sv">Svenska</option>
+                                <option value="ca">Català</option>
+                                <option value="ca-va">Valencià</option>
+                                <option value="pt-br">Português Brasileiro</option>
+                                <option value="ru">Russian</option>
+                                <option value="ja">日本語</option>
+                                <option value="zh-cn">中文（简体）</option>
+                                <option value="zh-tw">中文（正體）</option>
+                        </select>
+                </div>
+        </div>
+
+        <div class="row row-lg m-b">
+                <div><label data-localize="yes" for="settings-output-suffix">Use patch name for output</label></div>
+                <div class="text-right"><input type="checkbox" id="settings-output-suffix" class="styled" /></div>
+        </div>
+
+        <div class="row row-lg m-b">
+                <div><label data-localize="yes" for="settings-fix-checksum">Fix ROM checksum</label></div>
+                <div class="text-right"><input type="checkbox" id="settings-fix-checksum" class="styled" /></div>
+        </div>
+
+        <div class="row row-lg">
+                <div><label data-localize="yes" for="settings-light-theme">Light theme</label></div>
+                <div class="text-right"><input type="checkbox" id="settings-light-theme" class="styled" /></div>
+        </div>
+</dialog>
+
+
+</body></html>
 					<input type="file" id="patch-builder-input-file-original" class="empty" disabled />
 				</div>
 			</div>
